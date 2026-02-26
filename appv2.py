@@ -60,7 +60,8 @@ The **STPH Stop Optimizer** analyzes passenger boarding and alighting data to su
 ### 📂 Input Files
 
 **Boarding & Alighting CSV** *(required)*
-- Must contain columns: `lon`, `lat`, `isBoarding`, `isAlighting`
+- Must contain coordinate columns: `lon`/`lng`/`longitude` and `lat`/`latitude`
+- Must contain boarding/alighting columns: `isBoarding`/`board` and `isAlighting`/`alight` *(case-insensitive)*
 - `isBoarding` / `isAlighting` should be `True`/`False`
 
 **Reference Stops CSV** *(optional)*
@@ -93,9 +94,6 @@ The **STPH Stop Optimizer** analyzes passenger boarding and alighting data to su
 
 # ----------------------------
 # Inject a legend that floats OVER the pydeck map
-# Technique: render the map, then use a negative margin-top div that
-# visually overlaps the iframe below it. pointer-events:none means the
-# map stays fully interactive underneath.
 # ----------------------------
 LEGEND_STYLE = """
 <style>
@@ -212,6 +210,69 @@ def make_opt_legend(has_reference):
 
 
 # ----------------------------
+# Helper: Flexible column resolver
+# ----------------------------
+def find_column(df_columns, candidates):
+    """
+    Returns the first matching column name from `candidates` (case-insensitive).
+    `candidates` is an ordered list of preferred names.
+    Returns None if nothing matches.
+    """
+    col_map = {c.lower(): c for c in df_columns}
+    for candidate in candidates:
+        if candidate.lower() in col_map:
+            return col_map[candidate.lower()]
+    return None
+
+
+def resolve_coords_and_flags(df):
+    """
+    Detects lon, lat, boarding, and alighting columns flexibly.
+    Renames them to standard internal names: lon, lat, isBoarding, isAlighting.
+    Returns (df_normalized, error_message_or_None).
+    """
+    cols = df.columns.tolist()
+
+    lon_col = find_column(cols, ['lon', 'lng', 'longitude', 'long'])
+    lat_col = find_column(cols, ['lat', 'latitude'])
+    board_col = find_column(cols, ['isBoarding', 'boarding', 'board'])
+    alight_col = find_column(cols, ['isAlighting', 'alighting', 'alight'])
+
+    missing = []
+    if lon_col is None:
+        missing.append("longitude (tried: lon, lng, longitude, long)")
+    if lat_col is None:
+        missing.append("latitude (tried: lat, latitude)")
+    if board_col is None:
+        missing.append("boarding (tried: isBoarding, boarding, board)")
+    if alight_col is None:
+        missing.append("alighting (tried: isAlighting, alighting, alight)")
+
+    if missing:
+        return None, "Could not find required columns:\n- " + "\n- ".join(missing)
+
+    rename_map = {
+        lon_col:   'lon',
+        lat_col:   'lat',
+        board_col: 'isBoarding',
+        alight_col:'isAlighting',
+    }
+    # Only rename if the detected name differs from the target
+    rename_map = {k: v for k, v in rename_map.items() if k != v}
+    df = df.rename(columns=rename_map)
+
+    # Normalize boolean-like values (handles True/False strings, 1/0, yes/no)
+    for flag_col in ['isBoarding', 'isAlighting']:
+        col_data = df[flag_col]
+        if col_data.dtype == object:
+            df[flag_col] = col_data.str.strip().str.lower().isin(['true', '1', 'yes'])
+        else:
+            df[flag_col] = col_data.astype(bool)
+
+    return df, None
+
+
+# ----------------------------
 # Upload CSV
 # ----------------------------
 uploaded_file = st.file_uploader("Upload Boarding & Alighting CSV File", type=["csv"])
@@ -253,7 +314,13 @@ if reference_file is not None:
 # Main App
 # ----------------------------
 if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
+    raw_df = pd.read_csv(uploaded_file)
+
+    df, col_error = resolve_coords_and_flags(raw_df)
+    if col_error:
+        st.error(col_error)
+        st.stop()
+
     df = df[(df['isBoarding'] == True) | (df['isAlighting'] == True)]
     df = df.dropna(subset=['lon', 'lat'])
 

@@ -235,8 +235,8 @@ def resolve_coords_and_flags(df):
 
     lon_col = find_column(cols, ['lon', 'lng', 'longitude', 'long'])
     lat_col = find_column(cols, ['lat', 'latitude'])
-    board_col = find_column(cols, ['isBoarding', 'boarding', 'board'])
-    alight_col = find_column(cols, ['isAlighting', 'alighting', 'alight'])
+    board_col = find_column(cols, ['isBoarding', 'boarding', 'board','is_boarding'])
+    alight_col = find_column(cols, ['isAlighting', 'alighting', 'alight','is_alighting'])
 
     missing = []
     if lon_col is None:

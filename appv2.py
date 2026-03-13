@@ -108,8 +108,8 @@ st.markdown(f"""
 <style>
 .feedback-fab {{
     position: fixed;
-    bottom: 8px;
-    right: 28px;
+    top: 65px;
+    right: 15px;
     z-index: 9999;
     display: flex;
     flex-direction: column;

@@ -11,9 +11,9 @@ st.set_page_config(layout="wide")
 title_col, info_col = st.columns([11, 1])
 with title_col:
     st.markdown("""
-    <div style='display:flex; align-items:center; gap:12px; margin-bottom:8px;'>
-            <img src='https://i.fbcd.co/products/resized/resized-1500-1000/34-4625586a1856fbe77fcdd2c4e1088a37b6d94f819ef4b324721ff9533bd7ac45.webp' 
-                 width='80' height='80' 
+    <div style='display:flex; align-items:center; gap:7px; margin-bottom:8px;'>
+            <img src='https://img.freepik.com/premium-vector/public-bus-location-icon_194117-883.jpg' 
+                 width='60' height='60' 
                  style='border-radius:8px;'
                  alt='IMG'>
         <span style='font-size:2.8rem; font-weight:800; line-height:1.15; letter-spacing:-0.5px;'>

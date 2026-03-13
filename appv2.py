@@ -11,9 +11,16 @@ st.set_page_config(layout="wide")
 title_col, info_col = st.columns([11, 1])
 with title_col:
     st.markdown("""
-    <div style='display:flex;align-items:center;gap:12px;margin-bottom:8px;'>
-        <span style='font-size:2.6rem;'>🚌</span>
-        <span style='font-size:2.6rem;font-weight:800;line-height:1.15;letter-spacing:-0.5px;'>STPH Stop Optimizer</span>
+    <div style='display:flex; align-items:center; gap:12px; margin-bottom:8px;'>
+        <a href='https://sl.bing.net/emWMFu2ybYa' target='_blank'>
+            <img src='https://i.fbcd.co/products/resized/resized-1500-1000/34-4625586a1856fbe77fcdd2c4e1088a37b6d94f819ef4b324721ff9533bd7ac45.webp' 
+                 width='80' height='80' 
+                 style='border-radius:8px;'
+                 alt='IMG'>
+        </a>
+        <span style='font-size:2.8rem; font-weight:800; line-height:1.15; letter-spacing:-0.5px;'>
+            STPH Stop Optimizer
+        </span>
     </div>
     """, unsafe_allow_html=True)
 with info_col:
@@ -57,7 +64,7 @@ The **STPH Stop Optimizer** analyzes passenger boarding and alighting data to su
 
 ---
 
-### 📂 Input Files
+### Input Files
 
 **Boarding & Alighting CSV** *(required)*
 - Must contain coordinate columns: `lon`/`lng`/`longitude` and `lat`/`latitude`
@@ -73,7 +80,7 @@ The **STPH Stop Optimizer** analyzes passenger boarding and alighting data to su
 
 ---
 
-### 🔄 How It Works
+### How It Works
 
 1. **Upload** your boarding & alighting data
 2. **Explore** the map — view passenger density heatmap and color-coded boarding/alighting points
@@ -83,7 +90,7 @@ The **STPH Stop Optimizer** analyzes passenger boarding and alighting data to su
 
 ---
 
-### 🗺️ Map Legend
+### Map Legend
 | Color | Meaning |
 |---|---|
 | 🟢 Green | Boarding points / Snapped stops |
@@ -91,6 +98,125 @@ The **STPH Stop Optimizer** analyzes passenger boarding and alighting data to su
 | 🟠 Orange | Reference stops |
 | Gradient | Passenger density heatmap |
         """)
+
+# ----------------------------
+# Floating Feedback Button (Google Form)
+# ----------------------------
+GOOGLE_FORM_URL = "https://forms.gle/W9w8CmaCeVzCxNir8"
+
+st.markdown(f"""
+<style>
+.feedback-fab {{
+    position: fixed;
+    bottom: 8px;
+    right: 28px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    pointer-events: auto;
+}}
+.feedback-fab a {{
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: #0496C7;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 11px 20px 11px 15px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.45), 0 1px 3px rgba(0,0,0,0.25);
+    transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), box-shadow 0.18s ease, background 0.18s ease;
+    border: 1.5px solid rgba(255,255,255,0.18);
+    white-space: nowrap;
+}}
+.feedback-fab a:hover {{
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.55), 0 2px 6px rgba(0,0,0,0.2);
+    background: #1a3fc4;
+    color: #ffffff !important;
+    text-decoration: none !important;
+}}
+.feedback-fab .fab-icon {{
+    font-size: 16px;
+    line-height: 1;
+    flex-shrink: 0;
+}}
+@keyframes fab-slide-in {{
+    from {{ opacity: 0; transform: translateY(20px) scale(0.9); }}
+    to   {{ opacity: 1; transform: translateY(0) scale(1); }}
+}}
+.feedback-fab {{
+    animation: fab-slide-in 0.5s cubic-bezier(.34,1.56,.64,1) 0.8s both;
+}}
+</style>
+<div class="feedback-fab">
+    <div style="position:relative;display:inline-block;">
+        <a href="{GOOGLE_FORM_URL}" target="_blank" rel="noopener noreferrer">
+            <span class="fab-icon">💬</span>
+            Give Feedback
+        </a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ----------------------------
+# Uploader styling — taller drop zones
+# ----------------------------
+st.markdown("""
+<style>
+[data-testid="stFileUploader"] section {
+    min-height: 140px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px dashed rgba(120,130,160,0.55) !important;
+    border-radius: 12px !important;
+    background: rgba(30, 40, 60, 0.18) !important;
+    transition: border-color 0.2s ease, background 0.2s ease !important;
+    padding: 20px 16px !important;
+}
+[data-testid="stFileUploader"] section:hover {
+    border-color: rgba(99, 140, 255, 0.85) !important;
+    background: rgba(40, 60, 100, 0.28) !important;
+}
+[data-testid="stFileUploader"] section > div {
+    text-align: center !important;
+}
+[data-testid="stFileUploader"] label p {
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ----------------------------
+# Side-by-side uploaders
+# ----------------------------
+upload_left, upload_right = st.columns(2)
+
+with upload_left:
+    st.markdown("##### 📄 Boarding & Alighting Data *(required)*")
+    uploaded_file = st.file_uploader(
+        "Upload a CSV with boarding/alighting points",
+        type=["csv"],
+        key="ba_upload",
+        label_visibility="collapsed",
+    )
+
+with upload_right:
+    st.markdown("##### 📍 Reference Stops *(optional)*")
+    reference_file = st.file_uploader(
+        "Upload a CSV with existing bus stop locations",
+        type=["csv"],
+        key="reference",
+        label_visibility="collapsed",
+    )
 
 # ----------------------------
 # Inject a legend that floats OVER the pydeck map
@@ -104,7 +230,7 @@ div[data-testid="stVerticalBlock"] div[data-testid="stVerticalBlock"]
     pointer-events: none;
 }
 .map-legend-float {
-    margin-top: -460px;
+    margin-top: -440px;
     margin-right: 10px;
     float: right;
     display: inline-block;
@@ -170,6 +296,7 @@ def make_ba_legend(show_points, show_heatmap):
             <div><div class='legend-label'>Alighting</div>
                  <div class='legend-desc'>Passengers getting off the bus</div></div>
         </div>"""
+
     if show_heatmap:
         rows += """
         <div class='legend-divider'></div>
@@ -213,11 +340,6 @@ def make_opt_legend(has_reference):
 # Helper: Flexible column resolver
 # ----------------------------
 def find_column(df_columns, candidates):
-    """
-    Returns the first matching column name from `candidates` (case-insensitive).
-    `candidates` is an ordered list of preferred names.
-    Returns None if nothing matches.
-    """
     col_map = {c.lower(): c for c in df_columns}
     for candidate in candidates:
         if candidate.lower() in col_map:
@@ -225,62 +347,56 @@ def find_column(df_columns, candidates):
     return None
 
 
+def parse_bool_col(series):
+    """Robustly parse a column into boolean values."""
+    if series.dtype == object:
+        normalized = series.str.strip().str.lower()
+        return normalized.isin(['true', '1', '1.0', 'yes'])
+    elif series.dtype in [np.float64, np.float32]:
+        return series.fillna(0).astype(int).astype(bool)
+    else:
+        return series.fillna(0).astype(bool)
+
+
 def resolve_coords_and_flags(df):
-    """
-    Detects lon, lat, boarding, and alighting columns flexibly.
-    Renames them to standard internal names: lon, lat, isBoarding, isAlighting.
-    Returns (df_normalized, error_message_or_None).
-    """
     cols = df.columns.tolist()
 
-    lon_col = find_column(cols, ['lon', 'lng', 'longitude', 'long'])
-    lat_col = find_column(cols, ['lat', 'latitude'])
-    board_col = find_column(cols, ['isBoarding', 'boarding', 'board','is_boarding'])
-    alight_col = find_column(cols, ['isAlighting', 'alighting', 'alight','is_alighting'])
+    lon_col    = find_column(cols, ['lon', 'lng', 'longitude', 'long'])
+    lat_col    = find_column(cols, ['lat', 'latitude'])
+    board_col  = find_column(cols, ['isBoarding', 'boarding', 'board', 'is_boarding'])
+    alight_col = find_column(cols, ['isAlighting', 'alighting', 'alight', 'is_alighting'])
 
     missing = []
-    if lon_col is None:
-        missing.append("longitude (tried: lon, lng, longitude, long)")
-    if lat_col is None:
-        missing.append("latitude (tried: lat, latitude)")
-    if board_col is None:
-        missing.append("boarding (tried: isBoarding, boarding, board)")
-    if alight_col is None:
-        missing.append("alighting (tried: isAlighting, alighting, alight)")
+    if lon_col   is None: missing.append("longitude (tried: lon, lng, longitude, long)")
+    if lat_col   is None: missing.append("latitude (tried: lat, latitude)")
+    if board_col is None: missing.append("boarding (tried: isBoarding, boarding, board)")
+    # isAlighting is NOT required — inferred as inverse of isBoarding if absent
 
     if missing:
         return None, "Could not find required columns:\n- " + "\n- ".join(missing)
 
-    rename_map = {
-        lon_col:   'lon',
-        lat_col:   'lat',
-        board_col: 'isBoarding',
-        alight_col:'isAlighting',
-    }
-    # Only rename if the detected name differs from the target
-    rename_map = {k: v for k, v in rename_map.items() if k != v}
-    df = df.rename(columns=rename_map)
+    df = df.copy()
+    df['lon'] = df[lon_col]
+    df['lat'] = df[lat_col]
+    df['isBoarding'] = parse_bool_col(df[board_col])
 
-    # Normalize boolean-like values (handles True/False strings, 1/0, yes/no)
-    for flag_col in ['isBoarding', 'isAlighting']:
-        col_data = df[flag_col]
-        if col_data.dtype == object:
-            df[flag_col] = col_data.str.strip().str.lower().isin(['true', '1', 'yes'])
-        else:
-            df[flag_col] = col_data.astype(bool)
+    # Use isAlighting column if it exists and is distinct from isBoarding column.
+    # If both columns end up all-True (common parsing error), fall back to inference.
+    if alight_col is not None and alight_col != board_col:
+        df['isAlighting'] = parse_bool_col(df[alight_col])
+        if df['isBoarding'].all() and df['isAlighting'].all():
+            # Both all-True means something went wrong — infer instead
+            df['isAlighting'] = ~df['isBoarding']
+    else:
+        # No separate alighting column found — alighting = NOT boarding
+        df['isAlighting'] = ~df['isBoarding']
 
     return df, None
 
 
 # ----------------------------
-# Upload CSV
+# Process Reference Stops
 # ----------------------------
-uploaded_file = st.file_uploader("Upload Boarding & Alighting CSV File", type=["csv"])
-
-# ----------------------------
-# Upload Reference Stops (Optional)
-# ----------------------------
-reference_file = st.file_uploader("Upload Reference Stops CSV (Optional)", type=["csv"], key="reference")
 reference_stops = None
 
 if reference_file is not None:
@@ -300,14 +416,13 @@ if reference_file is not None:
     else:
         st.error("Reference file must contain either 'WKT' or 'X'/'Y' columns")
 
-    if reference_stops is None and 'ref_lon' in reference_df.columns:
+    if 'ref_lon' in reference_df.columns:
         reference_df = reference_df.dropna(subset=['ref_lon', 'ref_lat'])
-        if 'name' in reference_df.columns:
-            reference_stops = reference_df[['ref_lon', 'ref_lat', 'name']].copy()
-        else:
+        if 'name' not in reference_df.columns:
             reference_df['name'] = [f"Reference Stop {i+1}" for i in range(len(reference_df))]
-            reference_stops = reference_df[['ref_lon', 'ref_lat', 'name']].copy()
-        st.success(f"Reference stops loaded: {len(reference_stops)} stops")
+        reference_stops = reference_df[['ref_lon', 'ref_lat', 'name']].copy()
+        with upload_right:
+            st.success(f"✅ {len(reference_stops)} reference stops loaded")
 
 
 # ----------------------------
@@ -324,30 +439,37 @@ if uploaded_file is not None:
     df = df[(df['isBoarding'] == True) | (df['isAlighting'] == True)]
     df = df.dropna(subset=['lon', 'lat'])
 
-    st.success("Data Loaded Successfully!")
-
     boarding_df  = df[df['isBoarding']  == True].copy()
     alighting_df = df[df['isAlighting'] == True].copy()
 
-    st.write(f"Total points: {len(df)}  |  🟢 Boarding: {len(boarding_df)}  |  🔴 Alighting: {len(alighting_df)}")
+    with upload_left:
+        st.success(f"✅ Data loaded — {len(df)} passenger events")
 
     MAP_STYLES = {
+        "Road (built-in)": "road",
         "Carto Dark":      "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
         "Carto Light":     "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
-        "Road (built-in)": "road",
     }
 
     # ----------------------------
-    # Section 1: Boarding & Alighting Map (collapsible)
+    # Section 1: Boarding & Alighting Map
     # ----------------------------
-    with st.expander("📍 Boarding & Alighting Points", expanded=True):
-        st.markdown("## 📍 Boarding & Alighting Points")
+    st.markdown("""
+    <style>
+    details > summary p {
+        font-size: 1.8rem !important;
+        font-weight: 600 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    with st.expander("Passenger Activity Visual Map", expanded=True):
+        st.markdown("#### 📍 Boarding & Alighting Points")
         col1, col2 = st.columns([3, 1])
         with col2:
             st.markdown("**Map Options**")
             map_style_choice   = st.selectbox("Map Style", list(MAP_STYLES.keys()), index=0)
             selected_map_style = MAP_STYLES[map_style_choice]
-            show_points        = st.checkbox("Show Points",  value=True)
+            show_points        = st.checkbox("Show B/A Points",  value=True)
             show_heatmap       = st.checkbox("Show Heatmap", value=True)
             heatmap_intensity  = st.slider("Heatmap Intensity",   1,  20,  5)
             heatmap_radius     = st.slider("Heatmap Radius (px)", 10, 80, 30)
@@ -366,18 +488,26 @@ if uploaded_file is not None:
                 ],
             ))
         if show_points:
+
             if len(boarding_df) > 0:
                 layers.append(pdk.Layer(
-                    "ScatterplotLayer", data=boarding_df,
-                    get_position=['lon', 'lat'], get_radius=40,
-                    get_fill_color=[34, 197, 94, 210], pickable=True,
-                ))
+                "ScatterplotLayer", data=boarding_df,
+                get_position=['lon', 'lat'], get_radius=25,
+                get_fill_color=[34, 197, 94, 200],
+                get_line_color=[22, 163, 74, 255],  # darker green border
+                stroked=True, line_width_min_pixels=1,
+                pickable=True,
+            ))
+            
             if len(alighting_df) > 0:
                 layers.append(pdk.Layer(
-                    "ScatterplotLayer", data=alighting_df,
-                    get_position=['lon', 'lat'], get_radius=40,
-                    get_fill_color=[239, 68, 68, 210], pickable=True,
-                ))
+                "ScatterplotLayer", data=alighting_df,
+                get_position=['lon', 'lat'], get_radius=25,
+                get_fill_color=[239, 68, 68, 200],
+                get_line_color=[185, 28, 28, 255],  # darker red border
+                stroked=True, line_width_min_pixels=1,
+                pickable=True,
+            ))
 
         with col1:
             st.markdown(LEGEND_STYLE, unsafe_allow_html=True)
@@ -401,17 +531,98 @@ if uploaded_file is not None:
             st.metric("🔴 Alighting", len(alighting_df))
 
     # ----------------------------
-    # Run Clustering button — between the two sections
+    # Run Clustering button
     # ----------------------------
-    if st.button("🔄 Run Clustering"):
-        st.info("Clustering in progress...")
+    # Determine button state for rendering
+    is_done    = st.session_state.get('clustering_done', False)
+    is_running = st.session_state.get('clustering_running', False)
+
+    st.markdown("""
+    <style>
+    /* Base cluster button */
+    .cluster-btn > div[data-testid="stButton"] > button {
+        width: 100% !important;
+        height: 54px !important;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        border-radius: 30px !important;
+        letter-spacing: 0.03em;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+    }
+
+    /* Running state — animated shimmer */
+    .cluster-btn-running > div[data-testid="stButton"] > button {
+        width: 100% !important;
+        height: 54px !important;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        border-radius: 30px !important;
+        letter-spacing: 0.03em;
+        background: linear-gradient(90deg, #1d4ed8 0%, #3b82f6 40%, #1d4ed8 60%, #1d4ed8 100%) !important;
+        background-size: 200% 100% !important;
+        animation: shimmer 1.2s infinite linear !important;
+        color: white !important;
+        border: none !important;
+        cursor: not-allowed !important;
+    }
+    @keyframes shimmer {
+        0%   { background-position: 200% center; }
+        100% { background-position: -200% center; }
+    }
+
+    /* Done state — green */
+    .cluster-btn-done > div[data-testid="stButton"] > button {
+        width: 100% !important;
+        height: 54px !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        border-radius: 30px !important;
+        letter-spacing: 0.03em;
+        background: #16a34a !important;
+        color: white !important;
+        border: none !important;
+    }
+    .cluster-btn-done > div[data-testid="stButton"] > button:hover {
+        background: #15803d !important;
+        color: white !important;
+        border: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    _, btn_col, _ = st.columns([1, 2, 1])
+    with btn_col:
+        if is_done:
+            btn_class = "cluster-btn-done"
+            btn_label = "✅ Clustering Complete"
+        else:
+            btn_class = "cluster-btn"
+            btn_label = "🔄 Run Clustering"
+
+        st.markdown(f'<div class="{btn_class}">', unsafe_allow_html=True)
+        run_clustering = st.button(btn_label, use_container_width=True, key="cluster_btn")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    if run_clustering:
+        st.session_state['clustering_done']    = False
+        st.session_state['clustering_running'] = True
+
+        # Show shimmer button while working
+        _, btn_col2, _ = st.columns([1, 2, 1])
+        with btn_col2:
+            st.markdown('<div class="cluster-btn-running">', unsafe_allow_html=True)
+            st.button("⏳ Clustering...", use_container_width=True, key="cluster_btn_running", disabled=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+
         coordinates = df[['lon', 'lat']].values
-        clusterer = hdbscan.HDBSCAN(min_cluster_size=10, min_samples=3)
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=10, min_samples=4)
         df['Cluster'] = clusterer.fit_predict(np.radians(coordinates))
         df = df[df['Cluster'] != -1]
         centroids = df.groupby('Cluster')[['lon', 'lat']].mean().reset_index()
 
-        def filter_min_distance(centroids_df, min_distance_m=200):
+        def filter_min_distance(centroids_df, min_distance_m=300):
             kept = []
             for _, row in centroids_df.iterrows():
                 point = (row['lat'], row['lon'])
@@ -419,21 +630,32 @@ if uploaded_file is not None:
                     kept.append(row)
             return pd.DataFrame(kept)
 
-        st.session_state['filtered_centroids'] = filter_min_distance(centroids, 200)
-        st.session_state['n_clusters'] = df['Cluster'].nunique()
-        st.session_state['n_points']   = len(df)
+        st.session_state['filtered_centroids']  = filter_min_distance(centroids, 200)
+        st.session_state['n_clusters']          = df['Cluster'].nunique()
+        st.session_state['n_points']            = len(df)
+        st.session_state['clustering_done']     = True
+        st.session_state['clustering_running']  = False
+        st.rerun()
 
     # ----------------------------
-    # Section 2: Optimized Stops (collapsible)
+    # Section 2: Optimized Stops
     # ----------------------------
+    st.markdown("""
+        <style>
+        details > summary p {
+            font-size: 1.8rem !important;
+            font-weight: 600 !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
     if 'filtered_centroids' in st.session_state:
-        with st.expander("🔴 Optimized Stops", expanded=True):
-            st.markdown("## 🔴 Optimized Stops")
+        with st.expander("Optimized Stops Visual Map", expanded=True):
+            st.markdown("#### Optimized Stops")
             filtered_centroids = st.session_state['filtered_centroids']
 
             st.caption(f"Clustered points: {st.session_state['n_points']}  |  Clusters found: {st.session_state['n_clusters']}")
 
-            # Snap threshold
             if reference_stops is not None:
                 snap_threshold = st.slider("Snap Threshold (meters)", 50, 500, 150, 25)
                 snapped_centroids, unsnapped_centroids = [], []
@@ -460,59 +682,148 @@ if uploaded_file is not None:
                             'snapped': False, 'snap_distance': None, 'reference_name': None
                         })
                 final_centroids = pd.DataFrame(snapped_centroids + unsnapped_centroids)
-                st.caption(f"✅ Snapped: {len(snapped_centroids)}  |  🆕 New stops: {len(unsnapped_centroids)}  |  Total: {len(final_centroids)}")
+                st.caption(f" Snapped: {len(snapped_centroids)}  |  New stops: {len(unsnapped_centroids)}  |  Total: {len(final_centroids)}")
             else:
                 final_centroids = filtered_centroids.copy()
                 final_centroids['snapped'] = False
                 st.caption(f"Total optimized stops: {len(final_centroids)}")
 
             if len(final_centroids) > 0:
-                opt_layers = []
-                if reference_stops is not None:
-                    opt_layers.append(pdk.Layer(
-                        "ScatterplotLayer", data=reference_stops,
-                        get_position=['ref_lon', 'ref_lat'],
-                        get_color=[255, 165, 0, 200], get_radius=50, pickable=True,
+                has_ref = reference_stops is not None
+
+                # ── Side-by-side: map (left) + layer toggles (right) ──────
+                opt_map_col, opt_ctrl_col = st.columns([3, 1])
+
+                with opt_ctrl_col:
+                    st.markdown("**LAYER LEGEND**")
+                    show_new = st.checkbox(
+                        "🔴 Unsnapped Stops" if has_ref else "🔴 Unsnapped Stops",
+                        value=True, key="show_new_stops"
+                    )
+                    if has_ref:
+                        show_snapped = st.checkbox("🟢 Snapped to Reference Stop", value=True, key="show_snapped")
+                        show_ref     = st.checkbox("🟠 Reference Stops",       value=True, key="show_ref_stops")
+                    else:
+                        show_snapped = False
+                        show_ref     = False
+
+                # Rebuild layers based on checkbox state
+                opt_layers_filtered = []
+                if has_ref and show_ref:
+                    opt_layers_filtered.append(pdk.Layer("ScatterplotLayer", data=reference_stops,
+                    get_position=['ref_lon', 'ref_lat'],
+                    get_fill_color=[255, 165, 0, 200],
+                    get_line_color=[200, 110, 0, 255],
+                    stroked=True, line_width_min_pixels=1,
+                    get_radius=35, pickable=True,
                     ))
                 if 'snapped' in final_centroids.columns:
-                    snapped   = final_centroids[final_centroids['snapped'] == True]
-                    unsnapped = final_centroids[final_centroids['snapped'] == False]
-                    if len(snapped) > 0:
-                        opt_layers.append(pdk.Layer(
-                            "ScatterplotLayer", data=snapped,
-                            get_position=['lon', 'lat'], get_color=[0, 255, 0, 200],
-                            get_radius=70, pickable=True,
+                    snapped_df   = final_centroids[final_centroids['snapped'] == True]
+                    unsnapped_df = final_centroids[final_centroids['snapped'] == False]
+                    if has_ref and show_snapped and len(snapped_df) > 0:
+                        opt_layers_filtered.append(pdk.Layer(
+                            "ScatterplotLayer", data=snapped_df,
+                            get_position=['lon', 'lat'],
+                            get_color=[0, 255, 0, 200],
+                            get_fill_color=[0, 200, 80, 200],
+                            get_line_color=[0, 150, 50, 255],
+                            stroked=True, line_width_min_pixels=1,
+                            get_radius=45, pickable=True,
                         ))
-                    if len(unsnapped) > 0:
-                        opt_layers.append(pdk.Layer(
-                            "ScatterplotLayer", data=unsnapped,
-                            get_position=['lon', 'lat'], get_color=[255, 0, 0, 200],
-                            get_radius=70, pickable=True,
+                if show_new and len(unsnapped_df) > 0:
+                        opt_layers_filtered.append(pdk.Layer("ScatterplotLayer", data=unsnapped_df,
+                            get_position=['lon', 'lat'],
+                            get_fill_color=[239, 68, 68, 200],
+                            get_line_color=[185, 28, 28, 255],
+                            stroked=True, line_width_min_pixels=1,
+                            get_radius=45, pickable=True,
                         ))
                 else:
-                    opt_layers.append(pdk.Layer(
-                        "ScatterplotLayer", data=final_centroids,
-                        get_position=['lon', 'lat'], get_color=[255, 0, 0, 200], get_radius=70,
+                    if show_new:
+                        opt_layers_filtered.append(pdk.Layer(
+                            "ScatterplotLayer", data=final_centroids,
+                            get_position=['lon', 'lat'], get_color=[255, 0, 0, 200], get_radius=45,
+                        ))
+
+                with opt_map_col:
+                    st.pydeck_chart(pdk.Deck(
+                        map_style=selected_map_style,
+                        initial_view_state=pdk.ViewState(
+                            latitude=final_centroids['lat'].mean(),
+                            longitude=final_centroids['lon'].mean(),
+                            zoom=13, pitch=0,
+                        ),
+                        layers=opt_layers_filtered,
                     ))
 
-                st.pydeck_chart(pdk.Deck(
-                    map_style=selected_map_style,
-                    initial_view_state=pdk.ViewState(
-                        latitude=final_centroids['lat'].mean(),
-                        longitude=final_centroids['lon'].mean(),
-                        zoom=13, pitch=0,
-                    ),
-                    layers=opt_layers,
-                ))
-                st.markdown(make_opt_legend(reference_stops is not None), unsafe_allow_html=True)
-
+                # ── Centered Download button ────────────────────────────────
                 csv = final_centroids.to_csv(index=False).encode('utf-8')
-                st.download_button(
-                    "⬇️ Download Optimized Stops CSV", csv,
-                    "optimized_stops.csv", "text/csv"
-                )
+                dl_done = st.session_state.get('download_done', False)
+
+                st.markdown("""
+                <style>
+                .dl-btn > div[data-testid="stDownloadButton"] > button {
+                    width: 100% !important;
+                    height: 54px !important;
+                    font-size: 18px !important;
+                    font-weight: 700 !important;
+                    border-radius: 30px !important;
+                    letter-spacing: 0.03em;
+                    transition: background 0.3s ease, color 0.3s ease !important;
+                }
+                .dl-btn-running > div[data-testid="stDownloadButton"] > button {
+                    width: 100% !important;
+                    height: 54px !important;
+                    font-size: 18px !important;
+                    font-weight: 700 !important;
+                    border-radius: 30px !important;
+                    letter-spacing: 0.03em;
+                    background: linear-gradient(90deg, #0369a1 0%, #38bdf8 40%, #0369a1 60%, #0369a1 100%) !important;
+                    background-size: 200% 100% !important;
+                    animation: dl-shimmer 1.2s infinite linear !important;
+                    color: white !important;
+                    border: none !important;
+                }
+                @keyframes dl-shimmer {
+                    0%   { background-position: 200% center; }
+                    100% { background-position: -200% center; }
+                }
+                .dl-btn-done > div[data-testid="stDownloadButton"] > button {
+                    width: 100% !important;
+                    height: 54px !important;
+                    font-size: 18px !important;
+                    font-weight: 700 !important;
+                    border-radius: 30px !important;
+                    letter-spacing: 0.03em;
+                    background: #16a34a !important;
+                    color: white !important;
+                    border: none !important;
+                }
+                .dl-btn-done > div[data-testid="stDownloadButton"] > button:hover {
+                    background: #15803d !important;
+                    color: white !important;
+                    border: none !important;
+                }
+                </style>
+                """, unsafe_allow_html=True)
+
+                _, dl_col, _ = st.columns([1, 2, 1])
+                with dl_col:
+                    dl_class = "dl-btn-done" if dl_done else "dl-btn"
+                    dl_label = "✅ Download Successful" if dl_done else "⬇️ Download Optimized Stops CSV"
+                    st.markdown(f'<div class="{dl_class}">', unsafe_allow_html=True)
+                    clicked = st.download_button(
+                        dl_label, csv,
+                        "optimized_stops.csv", "text/csv",
+                        use_container_width=True,
+                        key="dl_btn",
+                    )
+                    st.markdown('</div>', unsafe_allow_html=True)
+                    if clicked:
+                        st.session_state['download_done'] = True
+                        st.rerun()
             else:
                 st.warning("No centroids found after filtering!")
 
 else:
-    st.info("Please upload a CSV file to begin.")
+    st.info("Please upload a Boarding & Alighting CSV file to begin.")

@@ -12,12 +12,10 @@ title_col, info_col = st.columns([11, 1])
 with title_col:
     st.markdown("""
     <div style='display:flex; align-items:center; gap:12px; margin-bottom:8px;'>
-        <a href='https://sl.bing.net/emWMFu2ybYa' target='_blank'>
             <img src='https://i.fbcd.co/products/resized/resized-1500-1000/34-4625586a1856fbe77fcdd2c4e1088a37b6d94f819ef4b324721ff9533bd7ac45.webp' 
                  width='80' height='80' 
                  style='border-radius:8px;'
                  alt='IMG'>
-        </a>
         <span style='font-size:2.8rem; font-weight:800; line-height:1.15; letter-spacing:-0.5px;'>
             STPH Stop Optimizer
         </span>

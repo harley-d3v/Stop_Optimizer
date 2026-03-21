@@ -359,8 +359,8 @@ def parse_bool_col(series):
 def resolve_coords_and_flags(df):
     cols = df.columns.tolist()
 
-    lon_col    = find_column(cols, ['lon', 'lng', 'longitude', 'long'])
-    lat_col    = find_column(cols, ['lat', 'latitude'])
+    lon_col    = find_column(cols, ['lon', 'lng', 'longitude', 'long','location.coordinates[0]'])
+    lat_col    = find_column(cols, ['lat', 'latitude','location.coordinates[1]'])
     board_col  = find_column(cols, ['isBoarding', 'boarding', 'board', 'is_boarding'])
     alight_col = find_column(cols, ['isAlighting', 'alighting', 'alight', 'is_alighting'])
 
